@@ -1,7 +1,7 @@
 # wheel_chooser
 
 WheelChooser is a widget allowing user to choose numbers/strings/widgets by scrolling spinners with wheel look.
-
+![vertical](https://raw.githubusercontent.com/mafanwei/WheelChooser/blob/master/screenShot/demoInteger.gif)
 ## Getting Started
 #### Install
 ```
@@ -41,4 +41,13 @@ use it to show CustomWidgets
 ```
 
 ### Usage examples
-
+![vertical](https://raw.githubusercontent.com/mafanwei/WheelChooser/blob/master/screenShot/demoInteger.gif)
+```dart
+WheelChooser.integer(
+        onValueChanged: (s) => print(s.toString()),
+        maxValue: 18,
+        minValue: 1,
+        initValue: 5,
+        unSelectTextStyle: TextStyle(color: Colors.grey),
+      )
+```
