@@ -51,3 +51,15 @@ WheelChooser.integer(
         unSelectTextStyle: TextStyle(color: Colors.grey),
       )
 ```
+
+![vertical](https://raw.githubusercontent.com/mafanwei/WheelChooser/master/screenShot/demoHorizon.jpg)
+```dart
+WheelChooser.integer(
+        onValueChanged: (s) => print(s.toString()),
+        maxValue: 20,
+        minValue: 1,
+        initValue: 9,
+        horizontal: true,
+        unSelectTextStyle: TextStyle(color: Colors.grey),
+      )
+```

@@ -65,6 +65,28 @@ Future<WheelChooser> _wheelChooserTester({WidgetTester tester}) async {
   await testGesture.moveBy(Offset(0, 48));
   expect(1, equals(index));
 
+  int number;
+  chooser = WheelChooser.integer(
+    initValue: 1,
+    minValue: 1,
+    maxValue: 10,
+    onValueChanged: (a) => number = a,
+    horizontal: true,
+  );
+
+  await tester.pumpWidget(StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+    return MaterialApp(
+      home: Scaffold(
+        body: chooser,
+      ),
+    );
+  }));
+
+  await tester.pumpAndSettle();
+  final TestGesture testGesture2 = await tester.startGesture(pickerCenter);
+  await testGesture2.moveBy(Offset(48, 0));
+  expect(1, equals(number));
+
   return chooser;
 }
 
