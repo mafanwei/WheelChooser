@@ -16,7 +16,7 @@ class WheelChooser extends StatefulWidget {
   final double listWidth;
   final List<Widget> children;
   final bool horizontal;
-  static const double _defaultitemSize = 48.0;
+  static const double _defaultItemSize = 48.0;
 
   WheelChooser({
     @required this.onValueChanged,
@@ -25,7 +25,7 @@ class WheelChooser extends StatefulWidget {
     this.unSelectTextStyle,
     this.startPosition = 0,
     this.squeeze = 1.0,
-    this.itemSize = _defaultitemSize,
+    this.itemSize = _defaultItemSize,
     this.magnification = 1,
     this.perspective = 0.01,
     this.listWidth,
@@ -40,7 +40,7 @@ class WheelChooser extends StatefulWidget {
     this.datas,
     this.startPosition = 0,
     this.squeeze = 1.0,
-    this.itemSize = _defaultitemSize,
+    this.itemSize = _defaultItemSize,
     this.magnification = 1,
     this.perspective = 0.01,
     this.listWidth,
@@ -60,7 +60,7 @@ class WheelChooser extends StatefulWidget {
     this.selectTextStyle,
     this.unSelectTextStyle,
     this.squeeze = 1.0,
-    this.itemSize = _defaultitemSize,
+    this.itemSize = _defaultItemSize,
     this.magnification = 1,
     this.perspective = 0.01,
     this.listWidth,
