@@ -16,6 +16,7 @@ class WheelChooser extends StatefulWidget {
   final double listWidth;
   final List<Widget> children;
   final bool horizontal;
+  final bool isInfinite;
   static const double _defaultItemSize = 48.0;
 
   WheelChooser({
@@ -31,7 +32,9 @@ class WheelChooser extends StatefulWidget {
     this.listWidth,
     this.listHeight,
     this.horizontal = false,
+    this.isInfinite = false,
   })  : assert(perspective <= 0.01),
+        assert(isInfinite != null),
         children = null;
 
   WheelChooser.custom({
@@ -46,8 +49,10 @@ class WheelChooser extends StatefulWidget {
     this.listWidth,
     this.listHeight,
     this.horizontal = false,
+    this.isInfinite = false,
   })  : assert(perspective <= 0.01),
         assert(datas == null || datas.length == children.length),
+        assert(isInfinite != null),
         selectTextStyle = null,
         unSelectTextStyle = null;
 
@@ -66,17 +71,24 @@ class WheelChooser extends StatefulWidget {
     this.listWidth,
     this.listHeight,
     this.horizontal = false,
+    this.isInfinite = false,
     bool reverse = false,
   })  : assert(perspective <= 0.01),
         assert(minValue < maxValue),
         assert(initValue == null || initValue >= minValue),
         assert(initValue == null || maxValue >= initValue),
         assert(step > 0),
+        assert(isInfinite != null),
         children = null,
         datas = _createIntegerList(minValue, maxValue, step, reverse),
-        startPosition = initValue == null ? 0 : reverse ? (maxValue - initValue) ~/ step : (initValue - minValue) ~/ step;
+        startPosition = initValue == null
+            ? 0
+            : reverse
+                ? (maxValue - initValue) ~/ step
+                : (initValue - minValue) ~/ step;
 
-  static List<int> _createIntegerList(int minValue, int maxValue, int step, bool reverse) {
+  static List<int> _createIntegerList(
+      int minValue, int maxValue, int step, bool reverse) {
     List<int> result = [];
     if (reverse) {
       for (int i = maxValue; i >= minValue; i -= step) {
@@ -99,11 +111,13 @@ class WheelChooser extends StatefulWidget {
 class _WheelChooserState extends State<WheelChooser> {
   FixedExtentScrollController fixedExtentScrollController;
   int currentPosition;
+
   @override
   void initState() {
     super.initState();
     currentPosition = widget.startPosition;
-    fixedExtentScrollController = FixedExtentScrollController(initialItem: currentPosition);
+    fixedExtentScrollController =
+        FixedExtentScrollController(initialItem: currentPosition);
   }
 
   void _listener(int position) {
@@ -124,17 +138,35 @@ class _WheelChooserState extends State<WheelChooser> {
         child: Container(
             height: widget.listHeight ?? double.infinity,
             width: widget.listWidth ?? double.infinity,
-            child: ListWheelScrollView(
-              onSelectedItemChanged: _listener,
-              perspective: widget.perspective,
-              squeeze: widget.squeeze,
-              controller: fixedExtentScrollController,
-              physics: FixedExtentScrollPhysics(),
-              children: _convertListItems() ?? _buildListItems(),
-              useMagnifier: true,
-              magnification: widget.magnification,
-              itemExtent: widget.itemSize,
-            )));
+            child: _getListWheelScrollView()));
+  }
+
+  Widget _getListWheelScrollView() {
+    if (widget.isInfinite) {
+      return ListWheelScrollView.useDelegate(
+          onSelectedItemChanged: _listener,
+          perspective: widget.perspective,
+          squeeze: widget.squeeze,
+          controller: fixedExtentScrollController,
+          physics: FixedExtentScrollPhysics(),
+          childDelegate: ListWheelChildLoopingListDelegate(
+              children: _convertListItems() ?? _buildListItems()),
+          useMagnifier: true,
+          magnification: widget.magnification,
+          itemExtent: widget.itemSize);
+    } else {
+      return ListWheelScrollView(
+        onSelectedItemChanged: _listener,
+        perspective: widget.perspective,
+        squeeze: widget.squeeze,
+        controller: fixedExtentScrollController,
+        physics: FixedExtentScrollPhysics(),
+        children: _convertListItems() ?? _buildListItems(),
+        useMagnifier: true,
+        magnification: widget.magnification,
+        itemExtent: widget.itemSize,
+      );
+    }
   }
 
   List<Widget> _buildListItems() {
@@ -147,7 +179,9 @@ class _WheelChooserState extends State<WheelChooser> {
             widget.datas[i].toString(),
             textAlign: TextAlign.center,
             textScaleFactor: 1.5,
-            style: i == currentPosition ? widget.selectTextStyle ?? null : widget.unSelectTextStyle ?? null,
+            style: i == currentPosition
+                ? widget.selectTextStyle ?? null
+                : widget.unSelectTextStyle ?? null,
           ),
         ),
       );
