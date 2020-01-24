@@ -162,7 +162,7 @@ class _WheelChooserState extends State<WheelChooser> {
         controller: fixedExtentScrollController,
         physics: FixedExtentScrollPhysics(),
         children: _convertListItems() ?? _buildListItems(),
-        useMagnifier: true,
+        useMagnifier: false,
         magnification: widget.magnification,
         itemExtent: widget.itemSize,
       );
