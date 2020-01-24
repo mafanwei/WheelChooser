@@ -17,7 +17,6 @@ class WheelChooser extends StatefulWidget {
   final List<Widget> children;
   final bool horizontal;
   final bool isInfinite;
-  final bool useMagnifier;
   static const double _defaultItemSize = 48.0;
 
   WheelChooser({
@@ -34,7 +33,6 @@ class WheelChooser extends StatefulWidget {
     this.listHeight,
     this.horizontal = false,
     this.isInfinite = false,
-    this.useMagnifier = false,
   })  : assert(perspective <= 0.01),
         assert(isInfinite != null),
         children = null;
@@ -52,7 +50,6 @@ class WheelChooser extends StatefulWidget {
     this.listHeight,
     this.horizontal = false,
     this.isInfinite = false,
-    this.useMagnifier = false,
   })  : assert(perspective <= 0.01),
         assert(datas == null || datas.length == children.length),
         assert(isInfinite != null),
@@ -75,7 +72,6 @@ class WheelChooser extends StatefulWidget {
     this.listHeight,
     this.horizontal = false,
     this.isInfinite = false,
-    this.useMagnifier = false,
     bool reverse = false,
   })  : assert(perspective <= 0.01),
         assert(minValue < maxValue),
@@ -155,7 +151,7 @@ class _WheelChooserState extends State<WheelChooser> {
           physics: FixedExtentScrollPhysics(),
           childDelegate: ListWheelChildLoopingListDelegate(
               children: _convertListItems() ?? _buildListItems()),
-          useMagnifier: widget.useMagnifier,
+          useMagnifier: true,
           magnification: widget.magnification,
           itemExtent: widget.itemSize);
     } else {
@@ -166,7 +162,7 @@ class _WheelChooserState extends State<WheelChooser> {
         controller: fixedExtentScrollController,
         physics: FixedExtentScrollPhysics(),
         children: _convertListItems() ?? _buildListItems(),
-        useMagnifier: widget.useMagnifier,
+        useMagnifier: true,
         magnification: widget.magnification,
         itemExtent: widget.itemSize,
       );
