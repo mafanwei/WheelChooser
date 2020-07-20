@@ -1,12 +1,14 @@
 # wheel_chooser
 
 WheelChooser is a widget allowing user to choose numbers/strings/widgets by scrolling spinners with wheel look.
+
 ![vertical](https://raw.githubusercontent.com/mafanwei/WheelChooser/master/screenShot/demoInteger.gif)
+
 ## Getting Started
 #### Install
 ```
 dependencies:
-  wheel_chooser: ^0.1.0
+  wheel_chooser: ^0.1.1
 ```
 #### Creating WheelChooser Widget
 use it to show Strings
