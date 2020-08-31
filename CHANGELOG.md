@@ -1,3 +1,7 @@
+## [0.1.1]
+
+* NEW: Support Infinite.
+
 ## [0.0.1]
 
 * NEW: Initial Release.

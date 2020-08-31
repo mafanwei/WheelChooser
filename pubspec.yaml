@@ -1,6 +1,6 @@
 name: wheel_chooser
 description: WheelChooser is a widget allowing user to choose numbers/strings/widgets by scrolling spinners with wheel look.
-version: 0.1.0
+version: 0.1.1
 author: Mafanwei <eraofma@qq.com>
 homepage: https://github.com/mafanwei/WheelChooser
 
