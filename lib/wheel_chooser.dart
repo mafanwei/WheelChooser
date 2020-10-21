@@ -175,13 +175,15 @@ class _WheelChooserState extends State<WheelChooser> {
       result.add(
         RotatedBox(
           quarterTurns: widget.horizontal ? 1 : 0,
-          child: Text(
-            widget.datas[i].toString(),
-            textAlign: TextAlign.center,
-            textScaleFactor: 1.5,
-            style: i == currentPosition
-                ? widget.selectTextStyle ?? null
-                : widget.unSelectTextStyle ?? null,
+          child: Center(
+            child: Text(
+              widget.datas[i].toString(),
+              textAlign: TextAlign.center,
+              textScaleFactor: 1.5,
+              style: i == currentPosition
+                  ? widget.selectTextStyle ?? null
+                  : widget.unSelectTextStyle ?? null,
+            ),
           ),
         ),
       );
