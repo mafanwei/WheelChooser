@@ -1,5 +1,6 @@
 library wheel_chooser;
 
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 
 class WheelChooser extends StatefulWidget {
@@ -17,6 +18,8 @@ class WheelChooser extends StatefulWidget {
   final List<Widget>? children;
   final bool horizontal;
   final bool isInfinite;
+  final double? indent;
+  final Color dividerColor;
   static const double _defaultItemSize = 48.0;
 
   WheelChooser({
@@ -28,9 +31,11 @@ class WheelChooser extends StatefulWidget {
     this.squeeze = 1.0,
     this.itemSize = _defaultItemSize,
     this.magnification = 1,
-    this.perspective = 0.01,
+    this.perspective = 0.0000001,
     this.listWidth,
     this.listHeight,
+    this.dividerColor = Colors.transparent,
+    this.indent = 16.0,
     this.horizontal = false,
     this.isInfinite = false,
   })  : assert(perspective <= 0.01),
@@ -48,6 +53,8 @@ class WheelChooser extends StatefulWidget {
     this.perspective = 0.01,
     this.listWidth,
     this.listHeight,
+    this.dividerColor = Colors.transparent,
+    this.indent = 16.0,
     this.horizontal = false,
     this.isInfinite = false,
   })  : assert(perspective <= 0.01),
@@ -65,6 +72,8 @@ class WheelChooser extends StatefulWidget {
     this.selectTextStyle,
     this.unSelectTextStyle,
     this.squeeze = 1.0,
+    this.dividerColor = Colors.transparent,
+    this.indent = 16.0,
     this.itemSize = _defaultItemSize,
     this.magnification = 1,
     this.perspective = 0.01,
@@ -156,16 +165,16 @@ class _WheelChooserState extends State<WheelChooser> {
           itemExtent: widget.itemSize);
     } else {
       return ListWheelScrollView(
-        onSelectedItemChanged: _listener,
-        perspective: widget.perspective,
-        squeeze: widget.squeeze,
-        controller: fixedExtentScrollController,
-        physics: FixedExtentScrollPhysics(),
-        children: _convertListItems() ?? _buildListItems(),
-        useMagnifier: true,
-        magnification: widget.magnification,
-        itemExtent: widget.itemSize,
-      );
+          onSelectedItemChanged: _listener,
+          perspective: widget.perspective,
+          squeeze: widget.squeeze,
+          controller: fixedExtentScrollController,
+          physics: FixedExtentScrollPhysics(),
+          children: _convertListItems() ?? _buildListItems(),
+          useMagnifier: true,
+          magnification: widget.magnification,
+          itemExtent: 72 //widget.itemSize,
+          );
     }
   }
 
@@ -175,16 +184,48 @@ class _WheelChooserState extends State<WheelChooser> {
       result.add(
         RotatedBox(
           quarterTurns: widget.horizontal ? 1 : 0,
-          child: Center(
-            child: Text(
-              widget.datas![i].toString(),
-              textAlign: TextAlign.center,
-              textScaleFactor: 1.5,
-              style: i == currentPosition
-                  ? widget.selectTextStyle ?? null
-                  : widget.unSelectTextStyle ?? null,
-            ),
-          ),
+          child: i == currentPosition
+              ? Center(
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Divider(
+                        indent: widget.indent,
+                        endIndent: widget.indent,
+                        color: widget.dividerColor,
+                        thickness: 1.0,
+                        height: 0,
+                      ),
+                      SizedBox(height: widget.indent),
+                      Text(
+                        widget.datas![i].toString(),
+                        textAlign: TextAlign.center,
+                        textScaleFactor: 1.5,
+                        style: i == currentPosition
+                            ? widget.selectTextStyle ?? null
+                            : widget.unSelectTextStyle ?? null,
+                      ),
+                      SizedBox(height: widget.indent),
+                      Divider(
+                        indent: widget.indent,
+                        endIndent: widget.indent,
+                        color: widget.dividerColor,
+                        height: 0,
+                        thickness: 1.0,
+                      ),
+                    ],
+                  ),
+                )
+              : Center(
+                  child: Text(
+                    widget.datas![i].toString(),
+                    textAlign: TextAlign.center,
+                    textScaleFactor: 1.5,
+                    style: i == currentPosition
+                        ? widget.selectTextStyle ?? null
+                        : widget.unSelectTextStyle ?? null,
+                  ),
+                ),
         ),
       );
     }
