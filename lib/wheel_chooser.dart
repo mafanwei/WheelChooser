@@ -3,25 +3,25 @@ library wheel_chooser;
 import 'package:flutter/widgets.dart';
 
 class WheelChooser extends StatefulWidget {
-  final TextStyle selectTextStyle;
-  final TextStyle unSelectTextStyle;
+  final TextStyle? selectTextStyle;
+  final TextStyle? unSelectTextStyle;
   final Function(dynamic) onValueChanged;
-  final List<dynamic> datas;
+  final List<dynamic>? datas;
   final int startPosition;
   final double itemSize;
   final double squeeze;
   final double magnification;
   final double perspective;
-  final double listHeight;
-  final double listWidth;
-  final List<Widget> children;
+  final double? listHeight;
+  final double? listWidth;
+  final List<Widget>? children;
   final bool horizontal;
   final bool isInfinite;
   static const double _defaultItemSize = 48.0;
 
   WheelChooser({
-    @required this.onValueChanged,
-    @required this.datas,
+    required this.onValueChanged,
+    required this.datas,
     this.selectTextStyle,
     this.unSelectTextStyle,
     this.startPosition = 0,
@@ -38,8 +38,8 @@ class WheelChooser extends StatefulWidget {
         children = null;
 
   WheelChooser.custom({
-    @required this.onValueChanged,
-    @required this.children,
+    required this.onValueChanged,
+    required this.children,
     this.datas,
     this.startPosition = 0,
     this.squeeze = 1.0,
@@ -51,16 +51,16 @@ class WheelChooser extends StatefulWidget {
     this.horizontal = false,
     this.isInfinite = false,
   })  : assert(perspective <= 0.01),
-        assert(datas == null || datas.length == children.length),
+        assert(datas == null || datas.length == children!.length),
         assert(isInfinite != null),
         selectTextStyle = null,
         unSelectTextStyle = null;
 
   WheelChooser.integer({
-    @required this.onValueChanged,
-    @required int maxValue,
-    @required int minValue,
-    int initValue,
+    required this.onValueChanged,
+    required int maxValue,
+    required int minValue,
+    int? initValue,
     int step = 1,
     this.selectTextStyle,
     this.unSelectTextStyle,
@@ -109,15 +109,15 @@ class WheelChooser extends StatefulWidget {
 }
 
 class _WheelChooserState extends State<WheelChooser> {
-  FixedExtentScrollController fixedExtentScrollController;
-  int currentPosition;
+  FixedExtentScrollController? fixedExtentScrollController;
+  int? currentPosition;
 
   @override
   void initState() {
     super.initState();
     currentPosition = widget.startPosition;
     fixedExtentScrollController =
-        FixedExtentScrollController(initialItem: currentPosition);
+        FixedExtentScrollController(initialItem: currentPosition!);
   }
 
   void _listener(int position) {
@@ -127,7 +127,7 @@ class _WheelChooserState extends State<WheelChooser> {
     if (widget.datas == null) {
       widget.onValueChanged(currentPosition);
     } else {
-      widget.onValueChanged(widget.datas[currentPosition]);
+      widget.onValueChanged(widget.datas![currentPosition!]);
     }
   }
 
@@ -171,13 +171,13 @@ class _WheelChooserState extends State<WheelChooser> {
 
   List<Widget> _buildListItems() {
     List<Widget> result = [];
-    for (int i = 0; i < widget.datas.length; i++) {
+    for (int i = 0; i < widget.datas!.length; i++) {
       result.add(
         RotatedBox(
           quarterTurns: widget.horizontal ? 1 : 0,
           child: Center(
             child: Text(
-              widget.datas[i].toString(),
+              widget.datas![i].toString(),
               textAlign: TextAlign.center,
               textScaleFactor: 1.5,
               style: i == currentPosition
@@ -191,16 +191,16 @@ class _WheelChooserState extends State<WheelChooser> {
     return result;
   }
 
-  List<Widget> _convertListItems() {
+  List<Widget>? _convertListItems() {
     if (widget.children == null) {
       return null;
     }
     if (widget.horizontal) {
       List<Widget> result = [];
-      for (int i = 0; i < widget.children.length; i++) {
+      for (int i = 0; i < widget.children!.length; i++) {
         result.add(RotatedBox(
           quarterTurns: 1,
-          child: widget.children[i],
+          child: widget.children![i],
         ));
       }
       return result;
