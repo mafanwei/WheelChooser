@@ -89,7 +89,7 @@ class WheelChooser extends StatefulWidget {
         children = null,
         datas = _createIntegerList(minValue, maxValue, step, reverse),
         startPosition = initValue == null
-            ? 0
+            ? (controller == null ? 0 : null)
             : reverse
                 ? (maxValue - initValue) ~/ step
                 : (initValue - minValue) ~/ step;
