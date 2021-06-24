@@ -17,6 +17,7 @@ class WheelChooser extends StatefulWidget {
   final List<Widget> children;
   final bool horizontal;
   final bool isInfinite;
+  final FixedExtentScrollController controller;
   static const double _defaultItemSize = 48.0;
 
   WheelChooser({
@@ -31,10 +32,12 @@ class WheelChooser extends StatefulWidget {
     this.perspective = 0.01,
     this.listWidth,
     this.listHeight,
+    this.controller,
     this.horizontal = false,
     this.isInfinite = false,
   })  : assert(perspective <= 0.01),
         assert(isInfinite != null),
+        assert(controller == null || startPosition == null),
         children = null;
 
   WheelChooser.custom({
@@ -48,11 +51,13 @@ class WheelChooser extends StatefulWidget {
     this.perspective = 0.01,
     this.listWidth,
     this.listHeight,
+    this.controller,
     this.horizontal = false,
     this.isInfinite = false,
   })  : assert(perspective <= 0.01),
         assert(datas == null || datas.length == children.length),
         assert(isInfinite != null),
+        assert(controller == null || startPosition == null),
         selectTextStyle = null,
         unSelectTextStyle = null;
 
@@ -70,6 +75,7 @@ class WheelChooser extends StatefulWidget {
     this.perspective = 0.01,
     this.listWidth,
     this.listHeight,
+    this.controller,
     this.horizontal = false,
     this.isInfinite = false,
     bool reverse = false,
@@ -79,6 +85,7 @@ class WheelChooser extends StatefulWidget {
         assert(initValue == null || maxValue >= initValue),
         assert(step > 0),
         assert(isInfinite != null),
+        assert(controller == null || initValue == null),
         children = null,
         datas = _createIntegerList(minValue, maxValue, step, reverse),
         startPosition = initValue == null
@@ -86,6 +93,26 @@ class WheelChooser extends StatefulWidget {
             : reverse
                 ? (maxValue - initValue) ~/ step
                 : (initValue - minValue) ~/ step;
+
+  WheelChooser.byController({
+    @required this.controller,
+    @required this.onValueChanged,
+    @required this.datas,
+    this.selectTextStyle,
+    this.unSelectTextStyle,
+    this.squeeze = 1.0,
+    this.itemSize = _defaultItemSize,
+    this.magnification = 1,
+    this.perspective = 0.01,
+    this.listWidth,
+    this.listHeight,
+    this.horizontal = false,
+    this.isInfinite = false,
+  })  : assert(controller != null),
+        assert(perspective <= 0.01),
+        assert(isInfinite != null),
+        children = null,
+        startPosition = null;
 
   static List<int> _createIntegerList(
       int minValue, int maxValue, int step, bool reverse) {
@@ -115,8 +142,8 @@ class _WheelChooserState extends State<WheelChooser> {
   @override
   void initState() {
     super.initState();
-    currentPosition = widget.startPosition;
-    fixedExtentScrollController =
+    currentPosition = widget.controller?.initialItem ?? widget.startPosition;
+    fixedExtentScrollController = widget.controller ??
         FixedExtentScrollController(initialItem: currentPosition);
   }
 
