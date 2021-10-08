@@ -1,5 +1,6 @@
+## [1.0.0]
 
-
+* Null safety support.
 * Support `constructor` as parameter.
 
 ## [0.1.1]

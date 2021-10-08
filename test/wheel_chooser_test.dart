@@ -3,21 +3,22 @@ import 'package:flutter_test/flutter_test.dart';
 
 import 'package:wheel_chooser/wheel_chooser.dart';
 
-Future<WheelChooser> _wheelChooserTester({WidgetTester tester}) async {
+Future<WheelChooser> _wheelChooserTester({required WidgetTester tester}) async {
   WheelChooser chooser;
   chooser = WheelChooser(
     onValueChanged: (s) => print(s),
     datas: ["a", "b", "c"],
     startPosition: 2,
   );
-  await tester.pumpWidget(StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+  await tester.pumpWidget(
+      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
     return MaterialApp(
       home: Scaffold(
         body: chooser,
       ),
     );
   }));
-  expect("c", equals(chooser.datas[2]));
+  expect("c", equals(chooser.datas![2]));
 
   chooser = WheelChooser.integer(
     onValueChanged: (i) => print(i),
@@ -26,16 +27,17 @@ Future<WheelChooser> _wheelChooserTester({WidgetTester tester}) async {
     step: 2,
   );
 
-  await tester.pumpWidget(StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+  await tester.pumpWidget(
+      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
     return MaterialApp(
       home: Scaffold(
         body: chooser,
       ),
     );
   }));
-  expect(9, equals(chooser.datas[chooser.datas.length - 1]));
+  expect(9, equals(chooser.datas![chooser.datas!.length - 1]));
 
-  int index;
+  int? index;
   chooser = WheelChooser.custom(
     onValueChanged: (a) => index = a,
     children: <Widget>[
@@ -45,7 +47,8 @@ Future<WheelChooser> _wheelChooserTester({WidgetTester tester}) async {
     ],
   );
 
-  await tester.pumpWidget(StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+  await tester.pumpWidget(
+      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
     return MaterialApp(
       home: Scaffold(
         body: chooser,
@@ -65,7 +68,7 @@ Future<WheelChooser> _wheelChooserTester({WidgetTester tester}) async {
   await testGesture.moveBy(Offset(0, 48));
   expect(1, equals(index));
 
-  int number;
+  int? number;
   chooser = WheelChooser.integer(
     initValue: 1,
     minValue: 1,
@@ -74,7 +77,8 @@ Future<WheelChooser> _wheelChooserTester({WidgetTester tester}) async {
     horizontal: true,
   );
 
-  await tester.pumpWidget(StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
+  await tester.pumpWidget(
+      StatefulBuilder(builder: (BuildContext context, StateSetter setState) {
     return MaterialApp(
       home: Scaffold(
         body: chooser,
