@@ -1,5 +1,7 @@
 # wheel_chooser
 
+[![pub package](https://img.shields.io/pub/v/wheel_chooser)](https://pub.dev/packages/wheel_chooser)
+
 WheelChooser is a widget allowing user to choose numbers/strings/widgets by scrolling spinners with wheel look.
 
 ![vertical](https://raw.githubusercontent.com/mafanwei/WheelChooser/master/screenShot/demoInteger.gif)
