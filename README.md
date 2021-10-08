@@ -67,3 +67,5 @@ WheelChooser.integer(
         unSelectTextStyle: TextStyle(color: Colors.grey),
       )
 ```
+
+From v0.1.1 support Infinite.
