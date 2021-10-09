@@ -1,6 +1,11 @@
-## [0.0.1]
+## [1.0.0]
 
-* NEW: Initial Release.
+* Null safety support.
+* Support `constructor` as parameter.
+
+## [0.1.1]
+
+* NEW: Support Infinite.
 
 ## [0.1.0]
 
@@ -8,7 +13,6 @@
 * NEW: Support Reverse Integer.
 * Fixed bug: about Integer step InitValue is not Current.
 
+## [0.0.1]
 
-## [0.1.1]
-
-* NEW: Support Infinite.
+* NEW: Initial Release.

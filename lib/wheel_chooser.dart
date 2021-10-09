@@ -3,25 +3,26 @@ library wheel_chooser;
 import 'package:flutter/widgets.dart';
 
 class WheelChooser extends StatefulWidget {
-  final TextStyle selectTextStyle;
-  final TextStyle unSelectTextStyle;
+  final TextStyle? selectTextStyle;
+  final TextStyle? unSelectTextStyle;
   final Function(dynamic) onValueChanged;
-  final List<dynamic> datas;
-  final int startPosition;
+  final List<dynamic>? datas;
+  final int? startPosition;
   final double itemSize;
   final double squeeze;
   final double magnification;
   final double perspective;
-  final double listHeight;
-  final double listWidth;
-  final List<Widget> children;
+  final double? listHeight;
+  final double? listWidth;
+  final List<Widget>? children;
   final bool horizontal;
   final bool isInfinite;
+  final FixedExtentScrollController? controller;
   static const double _defaultItemSize = 48.0;
 
   WheelChooser({
-    @required this.onValueChanged,
-    @required this.datas,
+    required this.onValueChanged,
+    required this.datas,
     this.selectTextStyle,
     this.unSelectTextStyle,
     this.startPosition = 0,
@@ -31,15 +32,16 @@ class WheelChooser extends StatefulWidget {
     this.perspective = 0.01,
     this.listWidth,
     this.listHeight,
+    this.controller,
     this.horizontal = false,
     this.isInfinite = false,
   })  : assert(perspective <= 0.01),
-        assert(isInfinite != null),
+        assert(controller == null || startPosition == null),
         children = null;
 
   WheelChooser.custom({
-    @required this.onValueChanged,
-    @required this.children,
+    required this.onValueChanged,
+    required this.children,
     this.datas,
     this.startPosition = 0,
     this.squeeze = 1.0,
@@ -48,19 +50,20 @@ class WheelChooser extends StatefulWidget {
     this.perspective = 0.01,
     this.listWidth,
     this.listHeight,
+    this.controller,
     this.horizontal = false,
     this.isInfinite = false,
   })  : assert(perspective <= 0.01),
-        assert(datas == null || datas.length == children.length),
-        assert(isInfinite != null),
+        assert(datas == null || datas.length == children!.length),
+        assert(controller == null || startPosition == null),
         selectTextStyle = null,
         unSelectTextStyle = null;
 
   WheelChooser.integer({
-    @required this.onValueChanged,
-    @required int maxValue,
-    @required int minValue,
-    int initValue,
+    required this.onValueChanged,
+    required int maxValue,
+    required int minValue,
+    int? initValue,
     int step = 1,
     this.selectTextStyle,
     this.unSelectTextStyle,
@@ -70,6 +73,7 @@ class WheelChooser extends StatefulWidget {
     this.perspective = 0.01,
     this.listWidth,
     this.listHeight,
+    this.controller,
     this.horizontal = false,
     this.isInfinite = false,
     bool reverse = false,
@@ -78,14 +82,32 @@ class WheelChooser extends StatefulWidget {
         assert(initValue == null || initValue >= minValue),
         assert(initValue == null || maxValue >= initValue),
         assert(step > 0),
-        assert(isInfinite != null),
+        assert(controller == null || initValue == null),
         children = null,
         datas = _createIntegerList(minValue, maxValue, step, reverse),
         startPosition = initValue == null
-            ? 0
+            ? (controller == null ? 0 : null)
             : reverse
                 ? (maxValue - initValue) ~/ step
                 : (initValue - minValue) ~/ step;
+
+  WheelChooser.byController({
+    required FixedExtentScrollController this.controller,
+    required this.onValueChanged,
+    required this.datas,
+    this.selectTextStyle,
+    this.unSelectTextStyle,
+    this.squeeze = 1.0,
+    this.itemSize = _defaultItemSize,
+    this.magnification = 1,
+    this.perspective = 0.01,
+    this.listWidth,
+    this.listHeight,
+    this.horizontal = false,
+    this.isInfinite = false,
+  })  : assert(perspective <= 0.01),
+        children = null,
+        startPosition = null;
 
   static List<int> _createIntegerList(
       int minValue, int maxValue, int step, bool reverse) {
@@ -109,25 +131,26 @@ class WheelChooser extends StatefulWidget {
 }
 
 class _WheelChooserState extends State<WheelChooser> {
-  FixedExtentScrollController fixedExtentScrollController;
-  int currentPosition;
+  FixedExtentScrollController? fixedExtentScrollController;
+  int? currentPosition;
 
   @override
   void initState() {
     super.initState();
-    currentPosition = widget.startPosition;
-    fixedExtentScrollController =
-        FixedExtentScrollController(initialItem: currentPosition);
+    currentPosition = widget.controller?.initialItem ?? widget.startPosition;
+    fixedExtentScrollController = widget.controller ??
+        FixedExtentScrollController(initialItem: currentPosition ?? 0);
   }
 
   void _listener(int position) {
     setState(() {
       currentPosition = position;
     });
-    if (widget.datas == null) {
+    final datas = widget.datas;
+    if (datas == null) {
       widget.onValueChanged(currentPosition);
     } else {
-      widget.onValueChanged(widget.datas[currentPosition]);
+      widget.onValueChanged(datas[currentPosition!]);
     }
   }
 
@@ -170,14 +193,15 @@ class _WheelChooserState extends State<WheelChooser> {
   }
 
   List<Widget> _buildListItems() {
+    final datas = widget.datas!;
     List<Widget> result = [];
-    for (int i = 0; i < widget.datas.length; i++) {
+    for (int i = 0; i < datas.length; i++) {
       result.add(
         RotatedBox(
           quarterTurns: widget.horizontal ? 1 : 0,
           child: Center(
             child: Text(
-              widget.datas[i].toString(),
+              datas[i].toString(),
               textAlign: TextAlign.center,
               textScaleFactor: 1.5,
               style: i == currentPosition
@@ -191,21 +215,22 @@ class _WheelChooserState extends State<WheelChooser> {
     return result;
   }
 
-  List<Widget> _convertListItems() {
-    if (widget.children == null) {
+  List<Widget>? _convertListItems() {
+    final children = widget.children;
+    if (children == null) {
       return null;
     }
     if (widget.horizontal) {
       List<Widget> result = [];
-      for (int i = 0; i < widget.children.length; i++) {
+      for (int i = 0; i < children.length; i++) {
         result.add(RotatedBox(
           quarterTurns: 1,
-          child: widget.children[i],
+          child: children[i],
         ));
       }
       return result;
     } else {
-      return widget.children;
+      return children;
     }
   }
 }
