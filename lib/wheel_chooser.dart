@@ -91,6 +91,38 @@ class WheelChooser extends StatefulWidget {
                 ? (maxValue - initValue) ~/ step
                 : (initValue - minValue) ~/ step;
 
+  WheelChooser.number({
+    required this.onValueChanged,
+    required num maxValue,
+    required num minValue,
+    num? initValue,
+    num step = 1,
+    this.selectTextStyle,
+    this.unSelectTextStyle,
+    this.squeeze = 1.0,
+    this.itemSize = _defaultItemSize,
+    this.magnification = 1,
+    this.perspective = 0.01,
+    this.listWidth,
+    this.listHeight,
+    this.controller,
+    this.horizontal = false,
+    this.isInfinite = false,
+    bool reverse = false,
+  })  : assert(perspective <= 0.01),
+        assert(minValue < maxValue),
+        assert(initValue == null || initValue >= minValue),
+        assert(initValue == null || maxValue >= initValue),
+        assert(step > 0),
+        assert(controller == null || initValue == null),
+        children = null,
+        datas = _createNumbersList(minValue, maxValue, step, reverse),
+        startPosition = initValue == null
+            ? (controller == null ? 0 : null)
+            : reverse
+                ? (maxValue - initValue) ~/ step
+                : (initValue - minValue) ~/ step;
+
   WheelChooser.byController({
     required FixedExtentScrollController this.controller,
     required this.onValueChanged,
@@ -110,7 +142,11 @@ class WheelChooser extends StatefulWidget {
         startPosition = null;
 
   static List<int> _createIntegerList(
-      int minValue, int maxValue, int step, bool reverse) {
+    int minValue,
+    int maxValue,
+    int step,
+    bool reverse,
+  ) {
     List<int> result = [];
     if (reverse) {
       for (int i = maxValue; i >= minValue; i -= step) {
@@ -122,6 +158,23 @@ class WheelChooser extends StatefulWidget {
       }
     }
     return result;
+  }
+
+  static List<num> _createNumbersList(
+    num minValue,
+    num maxValue,
+    num step,
+    bool reverse,
+  ) {
+    List<num> result = [];
+    num value = minValue;
+
+    while (value <= maxValue) {
+      result.add(value);
+      value += step;
+    }
+
+    return reverse ? result.reversed.toList() : result;
   }
 
   @override
