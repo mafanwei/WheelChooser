@@ -18,6 +18,7 @@ class WheelChooser extends StatefulWidget {
   final bool horizontal;
   final bool isInfinite;
   final FixedExtentScrollController? controller;
+  final ScrollPhysics? physics;
   static const double _defaultItemSize = 48.0;
 
   WheelChooser({
@@ -35,6 +36,7 @@ class WheelChooser extends StatefulWidget {
     this.controller,
     this.horizontal = false,
     this.isInfinite = false,
+    this.physics,
   })  : assert(perspective <= 0.01),
         assert(controller == null || startPosition == null),
         children = null;
@@ -53,6 +55,7 @@ class WheelChooser extends StatefulWidget {
     this.controller,
     this.horizontal = false,
     this.isInfinite = false,
+    this.physics,
   })  : assert(perspective <= 0.01),
         assert(datas == null || datas.length == children!.length),
         assert(controller == null || startPosition == null),
@@ -76,6 +79,7 @@ class WheelChooser extends StatefulWidget {
     this.controller,
     this.horizontal = false,
     this.isInfinite = false,
+    this.physics,
     bool reverse = false,
   })  : assert(perspective <= 0.01),
         assert(minValue < maxValue),
@@ -108,6 +112,7 @@ class WheelChooser extends StatefulWidget {
     this.controller,
     this.horizontal = false,
     this.isInfinite = false,
+    this.physics,
     bool reverse = false,
   })  : assert(perspective <= 0.01),
         assert(minValue < maxValue),
@@ -137,6 +142,7 @@ class WheelChooser extends StatefulWidget {
     this.listHeight,
     this.horizontal = false,
     this.isInfinite = false,
+    this.physics,
   })  : assert(perspective <= 0.01),
         children = null,
         startPosition = null;
@@ -224,7 +230,7 @@ class _WheelChooserState extends State<WheelChooser> {
           perspective: widget.perspective,
           squeeze: widget.squeeze,
           controller: fixedExtentScrollController,
-          physics: FixedExtentScrollPhysics(),
+          physics: FixedExtentScrollPhysics(parent: widget.physics),
           childDelegate: ListWheelChildLoopingListDelegate(
               children: _convertListItems() ?? _buildListItems()),
           useMagnifier: true,
@@ -236,7 +242,7 @@ class _WheelChooserState extends State<WheelChooser> {
         perspective: widget.perspective,
         squeeze: widget.squeeze,
         controller: fixedExtentScrollController,
-        physics: FixedExtentScrollPhysics(),
+        physics: FixedExtentScrollPhysics(parent: widget.physics),
         children: _convertListItems() ?? _buildListItems(),
         useMagnifier: true,
         magnification: widget.magnification,
