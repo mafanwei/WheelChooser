@@ -1,3 +1,9 @@
+## [1.1.0]
+
+* New 'choices' constructor.
+* Added WheelChooser.number.
+* Added physics property.
+
 ## [1.0.0]
 
 * Null safety support.
