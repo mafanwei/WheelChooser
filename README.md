@@ -31,6 +31,25 @@ WheelChooser.integer(
   );
 ```
 
+use it to show display titles and return a value associated with the selected value
+
+```dart
+
+List<WheelChoice> aChoices = [
+  WheelChoice(value: DateTime(2000,1,1,9,0), title: '9AM'),
+  WheelChoice(value: DateTime(2000,1,1,9,30), title: '9:30AM'),
+  WheelChoice(value: DateTime(2000,1,1,10,0), title: '10AM'),
+  WheelChoice(value: DateTime(2000,1,1,10,30), title: '10:30AM'),
+];
+
+WheelChooser.choices(
+    choices = aChoices,
+    onChoiceChanged: (value) {
+      // returns DateTime of selected title
+      print('selected time is ${value.hour} hours and ${value.minutes} minutes')
+    }
+  );
+```
 use it to show CustomWidgets
 
 ```dart
