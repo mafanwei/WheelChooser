@@ -65,6 +65,7 @@ class WheelChooser<T> extends StatefulWidget {
     this.controller,
     this.horizontal = false,
     this.isInfinite = false,
+    this.physics,
   })  : assert(perspective <= 0.01),
         assert(controller == null || startPosition == null),
         children = null, datas = null, onValueChanged = null;
