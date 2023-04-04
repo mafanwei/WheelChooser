@@ -152,7 +152,7 @@ class WheelChooser<T> extends StatefulWidget {
         assert(initValue == null || maxValue >= initValue),
         assert(step > 0),
         assert(controller == null || initValue == null),
-        children = null,
+        children = null, choices = null,
         datas = _createNumbersList(minValue, maxValue, step, reverse),
         startPosition = initValue == null
             ? (controller == null ? 0 : null)
