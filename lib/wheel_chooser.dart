@@ -145,6 +145,7 @@ class WheelChooser<T> extends StatefulWidget {
     this.horizontal = false,
     this.isInfinite = false,
     this.physics,
+    this.onChoiceChanged,
     bool reverse = false,
   })  : assert(perspective <= 0.01),
         assert(minValue < maxValue),
