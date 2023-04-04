@@ -10,7 +10,7 @@ WheelChooser is a widget allowing user to choose numbers/strings/widgets by scro
 #### Install
 ```
 dependencies:
-  wheel_chooser: ^1.1.1
+  wheel_chooser: ^1.1.2
 ```
 #### Creating WheelChooser Widget
 use it to show Strings

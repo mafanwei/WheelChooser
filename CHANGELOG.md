@@ -1,5 +1,9 @@
-## [1.1.1]
+## [1.1.2]
 * Fix 'choices' constructor bug.
+
+
+## [1.1.1]
+* Do not use this version.
 
 
 ## [1.1.0]
