@@ -1,3 +1,7 @@
+## [1.1.1]
+* Fix 'choices' constructor bug.
+
+
 ## [1.1.0]
 
 * New 'choices' constructor.
