@@ -1,5 +1,6 @@
 library wheel_chooser;
 
+import 'package:auto_size_text/auto_size_text.dart';
 import 'package:flutter/widgets.dart';
 
 class WheelChoice<T> {
@@ -30,7 +31,7 @@ class WheelChooser<T> extends StatefulWidget {
   final ScrollPhysics? physics;
   static const double _defaultItemSize = 48.0;
 
-  WheelChooser({
+  const WheelChooser({
     required this.onValueChanged,
     required this.datas,
     this.selectTextStyle,
@@ -48,9 +49,11 @@ class WheelChooser<T> extends StatefulWidget {
     this.physics,
   })  : assert(perspective <= 0.01),
         assert(controller == null || startPosition == null),
-        children = null, choices = null, onChoiceChanged = null;
+        children = null,
+        choices = null,
+        onChoiceChanged = null;
 
-  WheelChooser.choices({
+  const WheelChooser.choices({
     required this.onChoiceChanged,
     required this.choices,
     this.selectTextStyle,
@@ -68,8 +71,9 @@ class WheelChooser<T> extends StatefulWidget {
     this.physics,
   })  : assert(perspective <= 0.01),
         assert(controller == null || startPosition == null),
-        children = null, datas = null, onValueChanged = null;
-
+        children = null,
+        datas = null,
+        onValueChanged = null;
 
   WheelChooser.custom({
     required this.onValueChanged,
@@ -91,7 +95,8 @@ class WheelChooser<T> extends StatefulWidget {
         assert(datas == null || datas.length == children!.length),
         assert(controller == null || startPosition == null),
         selectTextStyle = null,
-        unSelectTextStyle = null, choices = null;
+        unSelectTextStyle = null,
+        choices = null;
 
   WheelChooser.integer({
     required this.onValueChanged,
@@ -119,7 +124,8 @@ class WheelChooser<T> extends StatefulWidget {
         assert(step > 0),
         assert(controller == null || initValue == null),
         children = null,
-        choices = null, onChoiceChanged = null,
+        choices = null,
+        onChoiceChanged = null,
         datas = _createIntegerList(minValue, maxValue, step, reverse),
         startPosition = initValue == null
             ? (controller == null ? 0 : null)
@@ -153,7 +159,8 @@ class WheelChooser<T> extends StatefulWidget {
         assert(initValue == null || maxValue >= initValue),
         assert(step > 0),
         assert(controller == null || initValue == null),
-        children = null, choices = null,
+        children = null,
+        choices = null,
         datas = _createNumbersList(minValue, maxValue, step, reverse),
         startPosition = initValue == null
             ? (controller == null ? 0 : null)
@@ -161,7 +168,7 @@ class WheelChooser<T> extends StatefulWidget {
                 ? (maxValue - initValue) ~/ step
                 : (initValue - minValue) ~/ step;
 
-  WheelChooser.byController({
+  const WheelChooser.byController({
     required FixedExtentScrollController this.controller,
     required this.onValueChanged,
     required this.datas,
@@ -245,7 +252,7 @@ class _WheelChooserState<T> extends State<WheelChooser> {
   }
 
   bool _isValidChoicePosition(int anIndex) {
-    return (anIndex >=0) && (anIndex < widget.choices!.length);
+    return (anIndex >= 0) && (anIndex < widget.choices!.length);
   }
 
   @override
@@ -260,16 +267,16 @@ class _WheelChooserState<T> extends State<WheelChooser> {
       currentPosition = position;
     });
     if (_hasChildren()) {
-       widget.onValueChanged!(currentPosition);
+      widget.onValueChanged!(currentPosition);
     } else {
-       if (_hasDatas()) {
-         widget.onValueChanged!(_findDatasByIndex(currentPosition!));
-       } else {
-         if ((_hasChoices()) && (_isValidChoicePosition(currentPosition!))) {
-           final aChoices = widget.choices!;
-           widget.onChoiceChanged!(aChoices[currentPosition!].value);
-         }
-       }
+      if (_hasDatas()) {
+        widget.onValueChanged!(_findDatasByIndex(currentPosition!));
+      } else {
+        if ((_hasChoices()) && (_isValidChoicePosition(currentPosition!))) {
+          final aChoices = widget.choices!;
+          widget.onChoiceChanged!(aChoices[currentPosition!].value);
+        }
+      }
     }
   }
 
@@ -277,7 +284,7 @@ class _WheelChooserState<T> extends State<WheelChooser> {
   Widget build(BuildContext context) {
     return RotatedBox(
         quarterTurns: widget.horizontal ? 3 : 0,
-        child: Container(
+        child: SizedBox(
             height: widget.listHeight ?? double.infinity,
             width: widget.listWidth ?? double.infinity,
             child: _getListWheelScrollView()));
@@ -318,10 +325,10 @@ class _WheelChooserState<T> extends State<WheelChooser> {
         squeeze: widget.squeeze,
         controller: fixedExtentScrollController,
         physics: FixedExtentScrollPhysics(parent: widget.physics),
-        children: _buildItems(),
         useMagnifier: true,
         magnification: widget.magnification,
         itemExtent: widget.itemSize,
+        children: _buildItems(),
       );
     }
   }
@@ -334,13 +341,11 @@ class _WheelChooserState<T> extends State<WheelChooser> {
         RotatedBox(
           quarterTurns: widget.horizontal ? 1 : 0,
           child: Center(
-            child: Text(
+            child: AutoSizeText(
               datas[i].toString(),
               textAlign: TextAlign.center,
               textScaleFactor: 1.5,
-              style: i == currentPosition
-                  ? widget.selectTextStyle ?? null
-                  : widget.unSelectTextStyle ?? null,
+              style: i == currentPosition ? widget.selectTextStyle : widget.unSelectTextStyle,
             ),
           ),
         ),
@@ -357,13 +362,11 @@ class _WheelChooserState<T> extends State<WheelChooser> {
         RotatedBox(
           quarterTurns: widget.horizontal ? 1 : 0,
           child: Center(
-            child: Text(
+            child: AutoSizeText(
               aChoices[i].title,
               textAlign: TextAlign.center,
               textScaleFactor: 1.5,
-              style: i == currentPosition
-                  ? widget.selectTextStyle ?? null
-                  : widget.unSelectTextStyle ?? null,
+              style: i == currentPosition ? widget.selectTextStyle : widget.unSelectTextStyle,
             ),
           ),
         ),
@@ -371,7 +374,6 @@ class _WheelChooserState<T> extends State<WheelChooser> {
     }
     return result;
   }
-
 
   List<Widget> _convertListItems() {
     final children = widget.children;
